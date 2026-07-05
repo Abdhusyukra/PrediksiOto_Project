@@ -420,7 +420,7 @@ def admin_users():
 @app.route("/api/admin/predictions", methods=["GET"])
 @admin_required
 def admin_predictions():
-    logs = PrediksiLog.query.order_by(PrediksiLog.created_at.desc()).limit(200).all()
+    logs = PrediksiLog.query.order_by(PrediksiLog.created_at.desc()).all()
 
     # Ambil semua nama user sekaligus, hindari query berulang per baris
     user_ids = [l.user_id for l in logs if l.user_id]
@@ -430,8 +430,12 @@ def admin_predictions():
     for l in logs:
         nama_user = users_map.get(l.user_id, "—")
         hasil.append({
-            "id": l.id, "user_nama": nama_user,
+            "id": l.id,
+            "user_id": l.user_id,
+            "user_nama": nama_user,
             "merek": l.merek, "model_mobil": l.model_mobil, "tahun": l.tahun,
+            "kilometer": l.kilometer,
+            "kondisi_body": l.kondisi_body,
             "harga_prediksi": l.harga_prediksi,
             "created_at": l.created_at.isoformat() if l.created_at else None
         })
