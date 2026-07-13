@@ -4,9 +4,10 @@ backend/__pycache__/
 backend/*.pyc
 backend/.env
 
-# Model ML (file besar, tidak perlu di GitHub)
-backend/model/*.pkl
+# Model ML (sudah di-include agar Railway bisa load model)
+# backend/model/*.pkl  ← dihapus, file pkl harus ada di GitHub untuk Railway
 backend/uploads/
+
 
 # Node
 frontend/node_modules/
