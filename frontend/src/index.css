@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply antialiased text-gray-800 bg-slate-50 selection:bg-brand-200 selection:text-brand-900;
+  html, body {
+    @apply antialiased text-gray-800 bg-slate-50 selection:bg-brand-200 selection:text-brand-900 overflow-x-hidden;
   }
 }
