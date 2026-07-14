@@ -441,15 +441,6 @@ def admin_predictions():
         })
     return ok({"predictions": hasil})
 
-@app.route("/api/admin/temp-create")
-def temp_create_admin():
-    adm = Admin.query.filter_by(username="admin").first()
-    if not adm:
-        db.session.add(Admin(username="admin", password=generate_password_hash("admin123")))
-        db.session.commit()
-        return ok({"message": "Admin created"})
-    return ok({"message": "Admin already exists"})
-
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
