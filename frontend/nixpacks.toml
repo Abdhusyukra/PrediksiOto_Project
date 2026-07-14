@@ -1,5 +1,5 @@
 [phases.build]
-cmds = ["npm install", "npm install -g serve", "npm run build"]
+cmds = ["npm install", "npm run build"]
 
 [start]
-cmd = "serve -s build -l $PORT"
+cmd = "npm run start:prod"
