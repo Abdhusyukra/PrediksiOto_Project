@@ -16,10 +16,17 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = (
-    f"mysql+mysqlconnector://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}"
-    f"@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT',3306)}/{os.getenv('DB_NAME')}"
-)
+db_url = os.getenv("DATABASE_URL")
+if not db_url:
+    db_url = (
+        f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}"
+        f"@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT', 5432)}/{os.getenv('DB_NAME')}"
+    )
+elif db_url.startswith("postgres://"):
+    # SQLAlchemy 1.4+ expects postgresql:// instead of postgres://
+    db_url = db_url.replace("postgres://", "postgresql://", 1)
+
+app.config["SQLALCHEMY_DATABASE_URI"] = db_url
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["JWT_SECRET_KEY"]           = os.getenv("JWT_SECRET_KEY")
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=24)
@@ -445,6 +452,8 @@ if __name__ == "__main__":
     with app.app_context():
         db.create_all()
         print("✓ Tabel database siap")
-    port = int(os.getenv("PORT", 5000))
+    # Hugging Face Spaces menggunakan port 7860 secara default
+    port = int(os.getenv("PORT", 7860))
     debug = os.getenv("FLASK_ENV", "production") == "development"
+    # Menjalankan server menggunakan werkzeug (Flask bawaan) di port 7860
     app.run(debug=debug, host="0.0.0.0", port=port)
