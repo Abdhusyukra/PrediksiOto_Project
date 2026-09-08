@@ -448,10 +448,11 @@ def admin_predictions():
         })
     return ok({"predictions": hasil})
 
+with app.app_context():
+    db.create_all()
+    print("✓ Tabel database siap")
+
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
-        print("✓ Tabel database siap")
     # Hugging Face Spaces menggunakan port 7860 secara default
     port = int(os.getenv("PORT", 7860))
     debug = os.getenv("FLASK_ENV", "production") == "development"
